@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <title>Blogify — Home</title>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+
+    <main class="wrap">
+        <% if (!blogs || blogs.length === 0) { %>
+
+            <div class="empty-state">
+                <h3>The front page is blank.</h3>
+                <p>Nobody has filed a story yet — <a href="/blog/add-new">write the first one</a>.</p>
+            </div>
+
+        <% } else { %>
+            <% const featured = blogs[0]; const rest = blogs.slice(1); %>
+
+            <section class="featured">
+                <div class="featured__media">
+                    <img src="<%= featured.coverImageURL %>" alt="<%= featured.title %>">
+                </div>
+                <div>
+                    <span class="eyebrow">Front page &middot; featured</span>
+                    <h1 class="featured__title"><a href="/blog/<%= featured._id %>"><%= featured.title %></a></h1>
+                    <p class="featured__excerpt"><%= featured.body.slice(0, 220) %><%= featured.body.length > 220 ? '…' : '' %></p>
+                    <div class="byline">
+                        <span><%= new Date(featured.createdAt).toDateString() %></span>
+                    </div>
+                </div>
+            </section>
+
+            <% if (rest.length > 0) { %>
+                <div class="section-label"><h2>More stories</h2></div>
+
+                <section class="grid">
+                    <% rest.forEach((blog, i) => { %>
+                        <a class="post-card" href="/blog/<%= blog._id %>">
+                            <span class="post-card__num"><%= String(i + 2).padStart(2, '0') %></span>
+                            <div class="post-card__media">
+                                <img src="<%= blog.coverImageURL %>" alt="<%= blog.title %>">
+                            </div>
+                            <h3 class="post-card__title"><%= blog.title %></h3>
+                            <p class="post-card__excerpt"><%= blog.body.slice(0, 90) %><%= blog.body.length > 90 ? '…' : '' %></p>
+                            <div class="byline"><span><%= new Date(blog.createdAt).toDateString() %></span></div>
+                        </a>
+                    <% }) %>
+                </section>
+            <% } %>
+        <% } %>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <p>Blogify &mdash; a small press for your thoughts.</p>
+            <p>Set in Fraunces &amp; Inter.</p>
+        </div>
+    </footer>
+
+    <%- include('./partials/script') %>
+</body>
+</html>

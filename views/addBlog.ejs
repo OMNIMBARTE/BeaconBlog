@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %>
+    <title>Blogify — Write</title>
+</head>
+<body>
+    <%- include('./partials/nav') %>
+
+    <main class="compose-wrap">
+        <span class="eyebrow">New story</span>
+        <h1>Write something worth reading</h1>
+        <p class="sub">Add a cover image, a title, and let it run.</p>
+
+        <form action="/blog/add-new" method="post" enctype="multipart/form-data">
+
+            <div class="field dropzone">
+                <label for="coverImage">Cover image</label>
+                <input type="file"
+                id="coverImage"
+                name="coverImage"
+                accept="image/*"
+                aria-describedby="coverImage"
+                required>
+            </div>
+
+            <div class="field">
+                <label for="title">Title</label>
+                <input type="text"
+                class="compose-title-input"
+                id="title"
+                name="title"
+                placeholder="Give it a headline"
+                aria-describedby="title"
+                required>
+            </div>
+
+            <div class="field">
+                <label for="body">Body</label>
+                <textarea name="body" id="body" rows="14" placeholder="Start writing…" required></textarea>
+            </div>
+
+            <button type="submit">Publish story</button>
+
+        </form>
+    </main>
+
+    <%- include('./partials/script') %>
+</body>
+</html>

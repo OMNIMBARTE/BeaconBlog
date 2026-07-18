@@ -1,0 +1,39 @@
+<header class="masthead">
+  <div class="wrap masthead__top">
+    <span class="masthead__date">Dispatches &amp; dog-eared thoughts</span>
+    <span class="masthead__tagline">Vol. 1 &middot; No. 1</span>
+  </div>
+  <div class="wrap masthead__main">
+    <a href="/" class="brand">Blog<span>ify</span></a>
+
+    <div class="nav-actions">
+      <% if (locals.user) { %>
+        <nav class="navlinks">
+          <a href="/">Home</a>
+          <a href="/blog/add-new">Write</a>
+        </nav>
+        <a href="/blog/add-new" class="btn-write">+ New post</a>
+        <div class="user-chip">
+          <button type="button" class="user-chip__btn">
+            <img src="/images/default.png" alt="">
+            <%= locals.user.fullname %>
+          </button>
+          <div class="user-chip__menu">
+            <a href="/user/logout">Log out</a>
+          </div>
+        </div>
+      <% } else { %>
+        <nav class="navlinks">
+          <a href="/">Home</a>
+          <a href="/user/signup">Create account</a>
+        </nav>
+        <a href="/user/signin" class="btn-write">Sign in</a>
+      <% } %>
+      <button type="button" class="nav-toggle" aria-label="Toggle menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<% if (locals.error) { %>
+  <div class="alert" role="alert"><%= locals.error %></div>
+<% } %>

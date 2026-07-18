@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('./partials/head') %>
+        <title><%= blog.title %> — Blogify</title>
+    </head>
+    <body>
+        <%- include('./partials/nav') %>
+
+        <main>
+            <article class="article-head">
+                <span class="eyebrow"><%= new Date(blog.createdAt).toDateString() %></span>
+                <h1><%= blog.title %></h1>
+                <div class="article-byline">
+                    <img src="<%= blog.createdBy && blog.createdBy.profileImage ? blog.createdBy.profileImage : '/images/default.png' %>" alt="">
+                    <span>By <strong><%= blog.createdBy ? blog.createdBy.fullname : 'Unknown' %></strong></span>
+                </div>
+            </article>
+
+            <% if (blog.coverImageURL) { %>
+                <div class="article-cover">
+                    <img src="<%= blog.coverImageURL %>" alt="<%= blog.title %>">
+                </div>
+            <% } %>
+
+            <div class="article-body"><%= blog.body %></div>
+
+            <section class="letters">
+                <div class="letters__head">
+                    <h2>Letters</h2>
+                    <span>(<%= comments.length %>)</span>
+                </div>
+
+                <% if (locals.user) { %>
+                    <form class="comment-form" action="/blog/comment/<%= blog._id %>" method="POST">
+                        <input
+                            type="text"
+                            name="content"
+                            placeholder="Share your thoughts"
+                            required
+                        >
+                        <button type="submit">Add</button>
+                    </form>
+                <% } %>
+
+                <% if (comments.length === 0) { %>
+                    <div class="empty-state">
+                        <p>No letters yet. Be the first to write in.</p>
+                    </div>
+                <% } else { %>
+                    <% comments.forEach(comment => { %>
+                        <div class="letter">
+                            <div class="letter__head">
+                                <img src="<%= comment.createdBy && comment.createdBy.profileImage ? comment.createdBy.profileImage : '/images/default.png' %>" alt="">
+                                <strong><%= comment.createdBy ? comment.createdBy.fullname : 'Unknown' %></strong>
+                            </div>
+                            <div class="letter__body"><%= comment.content %></div>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap">
+                <p>Blogify &mdash; a small press for your thoughts.</p>
+                <p><a href="/">&larr; Back to the front page</a></p>
+            </div>
+        </footer>
+
+        <%- include('./partials/script') %>
+    </body>
+</html>
