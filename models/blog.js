@@ -1,26 +1,14 @@
-const { Schema, model } = require("mongoose");
-const { schema } = require("./user");
+// models/blog.js
+const mongoose = require("mongoose");
 
-const blogSchema = new Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    body: {
-        type: String,
-        required: true,
-    },
-    coverImageURL: {
-        type: String,
-        required: false,
-    },
-    createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-    },
-},
-{ timestamps: true });
+const blogSchema = new mongoose.Schema({
+  title: String,
+  body: String,
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  coverImage: {
+    data: Buffer,
+    contentType: String,
+  },
+}, { timestamps: true });
 
-const Blog = model('blog', blogSchema);
-
-module.exports = Blog;
+module.exports = mongoose.model("Blog", blogSchema);

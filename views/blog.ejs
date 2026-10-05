@@ -17,9 +17,9 @@
                 </div>
             </article>
 
-            <% if (blog.coverImageURL) { %>
+            <% if (blog.coverImage && blog.coverImage.data) { %>
                 <div class="article-cover">
-                    <img src="<%= blog.coverImageURL %>" alt="<%= blog.title %>">
+                    <img src="/blog/<%= blog._id %>/cover-image" alt="cover" />
                 </div>
             <% } %>
 
