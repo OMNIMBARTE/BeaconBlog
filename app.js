@@ -22,17 +22,23 @@ app.use(cookie_parser());
 app.use(checkForAuthenticationCookie("Token"));
 app.use(express.static(path.join(__dirname, "public")));
 
-let isConnected = false;
+let cachedPromise = null;
 async function connectDB() {
-    if (isConnected || mongoose.connection.readyState >= 1) {
-        isConnected = true;
+    if (mongoose.connection.readyState === 1) {
         return;
     }
-    if (!process.env.MONGO_URL) {
-        throw new Error("MONGO_URL environment variable is missing.");
+    if (!cachedPromise) {
+        if (!process.env.MONGO_URL) {
+            throw new Error("MONGO_URL environment variable is missing.");
+        }
+        cachedPromise = mongoose.connect(process.env.MONGO_URL, {
+            serverSelectionTimeoutMS: 5000,
+        }).catch((err) => {
+            cachedPromise = null;
+            throw err;
+        });
     }
-    await mongoose.connect(process.env.MONGO_URL);
-    isConnected = true;
+    await cachedPromise;
 }
 
 // Ensure database connection for every request in serverless environment
