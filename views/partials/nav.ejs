@@ -32,6 +32,33 @@
         </nav>
         <a href="/user/signin" class="btn-write">Sign in</a>
       <% } %>
+
+      <!-- Theme Picker -->
+      <div class="theme-picker" id="themePicker" aria-label="Change theme">
+        <button type="button" class="theme-picker__btn" id="themePickerBtn" aria-haspopup="true" aria-expanded="false" title="Change theme">
+          <span id="themeIcon">🎨</span>
+        </button>
+        <div class="theme-picker__menu" id="themePickerMenu" role="menu">
+          <span class="theme-picker__label">Theme</span>
+          <button class="theme-option" data-theme="newsprint" role="menuitem">
+            <span class="theme-option__swatch" style="background:#FAF7F1; border-color:#DED7C7;"></span>
+            Newsprint
+          </button>
+          <button class="theme-option" data-theme="dark" role="menuitem">
+            <span class="theme-option__swatch" style="background:#18181B; border-color:#2E2D33;"></span>
+            Dark
+          </button>
+          <button class="theme-option" data-theme="slate" role="menuitem">
+            <span class="theme-option__swatch" style="background:#EEF2F8; border-color:#C4CDE0;"></span>
+            Slate
+          </button>
+          <button class="theme-option" data-theme="forest" role="menuitem">
+            <span class="theme-option__swatch" style="background:#F2F0E7; border-color:#BFD0AA;"></span>
+            Forest
+          </button>
+        </div>
+      </div>
+
       <button type="button" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks">
         <span></span>
       </button>
