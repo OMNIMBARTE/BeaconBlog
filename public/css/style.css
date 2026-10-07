@@ -40,8 +40,9 @@ body{
   font-size: 16px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
-img{ max-width: 100%; display: block; }
+img{ max-width: 100%; height: auto; display: block; }
 a{ color: inherit; text-decoration: none; }
 h1,h2,h3,h4{ font-family: var(--font-display); font-weight: 600; margin: 0; }
 p{ margin: 0 0 1em; }
@@ -52,7 +53,7 @@ button{ font-family: inherit; }
 .wrap{
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 28px;
 }
 
 .eyebrow{
@@ -167,6 +168,14 @@ button{ font-family: inherit; }
 .user-chip__btn img{
   width: 26px; height: 26px; border-radius: 50%; object-fit: cover;
 }
+.user-chip__name{
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
 .user-chip__menu{
   position: absolute;
   right: 0;
@@ -226,15 +235,61 @@ button{ font-family: inherit; }
     display: none;
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
     width: 100%;
-    padding: 16px 0;
+    padding: 14px 0 6px;
     border-top: 1px solid var(--line);
+    order: 10;
   }
   .navlinks.is-open{ display: flex; }
-  .masthead__main{ flex-direction: column; align-items: flex-start; }
-  .nav-toggle{ display: inline-flex; align-items: center; justify-content: center; }
-  .nav-actions{ width: 100%; justify-content: space-between; }
+  .navlinks a{
+    padding: 6px 0;
+    font-size: 14px;
+    display: block;
+    width: 100%;
+  }
+  .masthead__main{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px 0 16px;
+  }
+  .nav-toggle{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .nav-actions{
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px){
+  .masthead__top{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 8px 0 6px;
+  }
+  .brand{
+    font-size: clamp(32px, 8vw, 42px);
+  }
+  .btn-write{
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .user-chip__btn{
+    padding: 4px 8px 4px 4px;
+    font-size: 13px;
+  }
+  .user-chip__name{
+    max-width: 80px;
+  }
 }
 
 /* ==========================================================================
@@ -340,12 +395,14 @@ button{ font-family: inherit; }
 .empty-state a{ color: var(--accent-ink); text-decoration: underline; }
 
 @media (max-width: 900px){
-  .featured{ grid-template-columns: 1fr; }
-  .grid{ grid-template-columns: repeat(2, 1fr); }
+  .featured{ grid-template-columns: 1fr; gap: 24px; padding: 24px 0 8px; }
+  .grid{ grid-template-columns: repeat(2, 1fr); gap: 24px 18px; }
 }
 @media (max-width: 600px){
-  .grid{ grid-template-columns: 1fr; }
-  .wrap{ padding: 0 20px; }
+  .grid{ grid-template-columns: 1fr; gap: 20px; }
+  .wrap{ padding: 0 16px; }
+  .featured__title{ font-size: clamp(24px, 6vw, 36px); }
+  .section-label{ margin: 32px 0 16px; }
 }
 
 /* ==========================================================================
@@ -359,8 +416,10 @@ button{ font-family: inherit; }
 }
 .article-head .eyebrow{ display: block; margin-bottom: 14px; }
 .article-head h1{
-  font-size: clamp(32px, 5vw, 54px);
-  line-height: 1.05;
+  font-size: clamp(28px, 5.5vw, 54px);
+  line-height: 1.1;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .article-byline{
   display: flex;
@@ -371,6 +430,7 @@ button{ font-family: inherit; }
   font-family: var(--font-mono);
   font-size: 13px;
   color: var(--muted);
+  flex-wrap: wrap;
 }
 .article-byline img{ width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
 .article-byline strong{ color: var(--ink); font-family: var(--font-body); font-weight: 600; }
@@ -380,8 +440,14 @@ button{ font-family: inherit; }
   margin: 28px auto 0;
   border-radius: var(--radius);
   overflow: hidden;
+  background: var(--line);
 }
-.article-cover img{ width: 100%; }
+.article-cover img{
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: cover;
+}
 
 .article-body{
   max-width: 700px;
@@ -391,6 +457,8 @@ button{ font-family: inherit; }
   line-height: 1.75;
   color: var(--ink);
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .article-body::first-letter{
   font-size: 3.4em;
@@ -442,8 +510,24 @@ button{ font-family: inherit; }
 }
 .letter__head img{ width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
 .letter__head strong{ color: var(--ink); font-family: var(--font-body); font-size: 14px; }
-.letter__body{ color: var(--ink-soft); font-size: 15px; }
+.letter__body{
+  color: var(--ink-soft);
+  font-size: 15px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
 .letters .empty-state{ padding: 40px 0; }
+
+@media (max-width: 680px){
+  .article-head{ padding: 28px 0 16px; }
+  .article-cover{ margin: 18px auto 0; }
+  .article-cover img{ max-height: 320px; }
+  .article-body{ font-size: 17px; line-height: 1.65; margin: 24px auto; }
+  .article-body::first-letter{ font-size: 2.6em; padding: 4px 6px 0 0; }
+  .comment-form{ flex-direction: column; gap: 10px; }
+  .comment-form button{ width: 100%; min-height: 44px; }
+  .letters{ padding: 16px 0 40px; }
+}
 
 /* ==========================================================================
    Forms — shared
@@ -470,7 +554,7 @@ input[type="file"],
 textarea{
   width: 100%;
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 16px; /* Prevents auto-zoom on iOS */
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -501,6 +585,7 @@ button, .btn{
   padding: 12px 20px;
   border-radius: var(--radius);
   cursor: pointer;
+  min-height: 42px;
   transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent); }
@@ -520,7 +605,7 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
 }
 .auth-wrap .eyebrow{ display: block; margin-bottom: 10px; text-align: center; }
 .auth-wrap h1{
-  font-size: 34px;
+  font-size: clamp(26px, 5vw, 34px);
   text-align: center;
   margin-bottom: 6px;
 }
@@ -537,7 +622,7 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
   padding: 32px;
   box-shadow: var(--shadow-card);
 }
-.auth-card button{ width: 100%; margin-top: 6px; padding: 13px; }
+.auth-card button{ width: 100%; margin-top: 6px; padding: 13px; min-height: 46px; }
 .auth-switch{
   text-align: center;
   margin-top: 22px;
@@ -545,6 +630,12 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
   color: var(--muted);
 }
 .auth-switch a{ color: var(--accent-ink); font-weight: 600; text-decoration: underline; }
+
+@media (max-width: 480px){
+  .auth-wrap{ margin: 24px auto 60px; padding: 0 4px; }
+  .auth-card{ padding: 22px 18px; }
+  .auth-wrap .sub{ margin-bottom: 22px; }
+}
 
 /* ==========================================================================
    Compose (add blog)
@@ -555,13 +646,16 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
   padding: 48px 24px 90px;
 }
 .compose-wrap .eyebrow{ display: block; margin-bottom: 10px; }
-.compose-wrap h1{ font-size: 36px; margin-bottom: 8px; }
-.compose-wrap .sub{ color: var(--muted); font-size: 14px; margin-bottom: 36px; }
+.compose-wrap h1{
+  font-size: clamp(26px, 6vw, 36px);
+  margin-bottom: 8px;
+}
+.compose-wrap .sub{ color: var(--muted); font-size: 14px; margin-bottom: 32px; }
 .compose-title-input{
   font-family: var(--font-display) !important;
-  font-size: 28px !important;
+  font-size: clamp(20px, 4vw, 28px) !important;
   font-weight: 600;
-  padding: 14px 16px !important;
+  padding: 12px 14px !important;
 }
 .dropzone{
   border: 1.5px dashed var(--line);
@@ -570,6 +664,11 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
   background: var(--paper-raised);
 }
 .dropzone label{ margin-bottom: 10px; }
+
+@media (max-width: 600px){
+  .compose-wrap{ padding: 24px 0 60px; }
+  .compose-wrap button{ width: 100%; min-height: 46px; }
+}
 
 /* ==========================================================================
    Footer
@@ -592,4 +691,9 @@ button:hover, .btn:hover{ background: var(--accent); border-color: var(--accent)
   font-size: 12px;
   color: var(--muted);
   letter-spacing: 0.03em;
+}
+
+@media (max-width: 600px){
+  .site-footer{ margin-top: 40px; padding: 20px 0 30px; }
+  .site-footer .wrap{ flex-direction: column; align-items: flex-start; gap: 8px; }
 }
