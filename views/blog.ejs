@@ -5,27 +5,48 @@
         <title><%= blog.title %> — Blogify</title>
     </head>
     <body>
+        <div class="progress-bar" id="readProgress"></div>
+
         <%- include('./partials/nav') %>
 
         <main class="wrap">
-            <article class="article-head">
-                <span class="eyebrow"><%= new Date(blog.createdAt).toDateString() %></span>
+            <nav class="article-breadcrumb reveal">
+                <a href="/">← Home</a>
+                <span class="article-breadcrumb__sep">/</span>
+                <span><%= blog.title.slice(0, 40) %><%= blog.title.length > 40 ? '…' : '' %></span>
+            </nav>
+
+            <article class="article-head reveal">
+                <span class="eyebrow"><%= new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
                 <h1><%= blog.title %></h1>
-                <div class="article-byline">
-                    <img src="<%= blog.createdBy && blog.createdBy.profileImage ? blog.createdBy.profileImage : '/images/default.png' %>" alt="">
-                    <span>By <strong><%= blog.createdBy ? blog.createdBy.fullname : 'Unknown' %></strong></span>
+                <div class="article-meta">
+                    <div class="article-byline">
+                        <img
+                            src="<%= blog.createdBy && blog.createdBy.profileImage ? blog.createdBy.profileImage : '/images/default.png' %>"
+                            alt="<%= blog.createdBy ? blog.createdBy.fullname : 'Author' %>"
+                        >
+                        <span>By <strong><%= blog.createdBy ? blog.createdBy.fullname : 'Unknown' %></strong></span>
+                    </div>
+                    <span class="article-readtime" id="readTimeLabel">Reading…</span>
                 </div>
             </article>
 
+            <hr class="article-divider">
+
             <% if ((blog.coverImage && blog.coverImage.data) || blog.coverImageURL) { %>
-                <div class="article-cover">
-                    <img src="<%= (blog.coverImage && blog.coverImage.data) ? `/blog/${blog._id}/cover-image` : blog.coverImageURL %>" alt="<%= blog.title %>">
+                <div class="article-cover reveal">
+                    <img
+                        src="<%= (blog.coverImage && blog.coverImage.data) ? `/blog/${blog._id}/cover-image` : blog.coverImageURL %>"
+                        alt="<%= blog.title %>"
+                        loading="eager"
+                        decoding="async"
+                    >
                 </div>
             <% } %>
 
-            <div class="article-body"><%= blog.body %></div>
+            <div class="article-body" id="articleBody"><%= blog.body %></div>
 
-            <section class="letters">
+            <section class="letters reveal">
                 <div class="letters__head">
                     <h2>Letters</h2>
                     <span>(<%= comments.length %>)</span>
@@ -36,11 +57,16 @@
                         <input
                             type="text"
                             name="content"
-                            placeholder="Share your thoughts"
+                            placeholder="Share your thoughts…"
                             required
+                            autocomplete="off"
                         >
-                        <button type="submit">Add</button>
+                        <button type="submit">Send</button>
                     </form>
+                <% } else { %>
+                    <div class="comment-prompt">
+                        <a href="/user/signin">Sign in</a> to leave a letter to the editor.
+                    </div>
                 <% } %>
 
                 <% if (comments.length === 0) { %>
@@ -51,7 +77,10 @@
                     <% comments.forEach(comment => { %>
                         <div class="letter">
                             <div class="letter__head">
-                                <img src="<%= comment.createdBy && comment.createdBy.profileImage ? comment.createdBy.profileImage : '/images/default.png' %>" alt="">
+                                <img
+                                    src="<%= comment.createdBy && comment.createdBy.profileImage ? comment.createdBy.profileImage : '/images/default.png' %>"
+                                    alt=""
+                                >
                                 <strong><%= comment.createdBy ? comment.createdBy.fullname : 'Unknown' %></strong>
                             </div>
                             <div class="letter__body"><%= comment.content %></div>
@@ -63,8 +92,14 @@
 
         <footer class="site-footer">
             <div class="wrap">
-                <p>Blogify &mdash; a small press for your thoughts.</p>
-                <p><a href="/">&larr; Back to the front page</a></p>
+                <div class="site-footer__inner">
+                    <div class="site-footer__brand">Blog<span>ify</span></div>
+                    <p class="site-footer__copy">© <%= new Date().getFullYear() %> &mdash; A small press for your thoughts.</p>
+                    <nav class="site-footer__links">
+                        <a href="/">← Front page</a>
+                        <a href="/blog/add-new">Write</a>
+                    </nav>
+                </div>
             </div>
         </footer>
 

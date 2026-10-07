@@ -8,39 +8,47 @@
     <%- include('./partials/nav') %>
 
     <main class="compose-wrap">
-        <span class="eyebrow">New story</span>
-        <h1>Write something worth reading</h1>
-        <p class="sub">Add a cover image, a title, and let it run.</p>
+        <div class="compose-header reveal">
+            <span class="eyebrow">New story</span>
+            <h1>Write something worth reading</h1>
+            <p class="sub">Add a cover image, a headline, and let it run.</p>
+        </div>
 
-        <form action="/blog/add-new" method="post" enctype="multipart/form-data">
+        <form action="/blog/add-new" method="post" enctype="multipart/form-data" class="reveal reveal-delay-1">
 
-            <div class="field dropzone">
+            <div class="field dropzone" id="dropzoneField">
                 <label for="coverImage">Cover image</label>
                 <input type="file"
-                id="coverImage"
-                name="coverImage"
-                accept="image/*"
-                aria-describedby="coverImage"
-                required>
+                    id="coverImage"
+                    name="coverImage"
+                    accept="image/*"
+                    aria-describedby="coverImageHint"
+                    required
+                >
+                <p class="dropzone__hint" id="coverImageHint">JPG, PNG or WebP. Landscape works best.</p>
             </div>
 
             <div class="field">
-                <label for="title">Title</label>
+                <label for="title">Headline</label>
                 <input type="text"
-                class="compose-title-input"
-                id="title"
-                name="title"
-                placeholder="Give it a headline"
-                aria-describedby="title"
-                required>
+                    class="compose-title-input"
+                    id="title"
+                    name="title"
+                    placeholder="Give it a headline"
+                    required
+                    maxlength="120"
+                >
             </div>
 
             <div class="field">
                 <label for="body">Body</label>
-                <textarea name="body" id="body" rows="14" placeholder="Start writing…" required></textarea>
+                <textarea name="body" id="body" rows="16" placeholder="Start writing…" required></textarea>
             </div>
 
-            <button type="submit">Publish story</button>
+            <div class="compose-actions">
+                <button type="submit">Publish story</button>
+                <a href="/" class="btn btn-outline">Cancel</a>
+            </div>
 
         </form>
     </main>

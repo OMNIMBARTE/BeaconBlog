@@ -1,35 +1,40 @@
-<header class="masthead">
+<header class="masthead" id="masthead">
   <div class="wrap masthead__top">
     <span class="masthead__date">Dispatches &amp; dog-eared thoughts</span>
-    <span class="masthead__tagline">Vol. 1 &middot; No. 1</span>
+    <span class="masthead__tagline">Vol. 1 &middot; Est. <%= new Date().getFullYear() %></span>
   </div>
   <div class="wrap masthead__main">
     <a href="/" class="brand">Blog<span>ify</span></a>
 
     <div class="nav-actions">
       <% if (locals.user) { %>
-        <nav class="navlinks">
+        <nav class="navlinks" id="navlinks">
           <a href="/">Home</a>
           <a href="/blog/add-new">Write</a>
         </nav>
-        <a href="/blog/add-new" class="btn-write">+ New post</a>
+        <a href="/blog/add-new" class="btn-write">New post</a>
         <div class="user-chip">
-          <button type="button" class="user-chip__btn">
+          <button type="button" class="user-chip__btn" aria-haspopup="true" aria-expanded="false">
             <img src="/images/default.png" alt="">
             <span class="user-chip__name"><%= locals.user.fullname %></span>
+            <span class="user-chip__caret">▾</span>
           </button>
-          <div class="user-chip__menu">
-            <a href="/user/logout">Log out</a>
+          <div class="user-chip__menu" role="menu">
+            <a href="/blog/add-new" role="menuitem">✍️ Write</a>
+            <div class="user-chip__menu-divider"></div>
+            <a href="/user/logout" role="menuitem">Sign out</a>
           </div>
         </div>
       <% } else { %>
-        <nav class="navlinks">
+        <nav class="navlinks" id="navlinks">
           <a href="/">Home</a>
           <a href="/user/signup">Create account</a>
         </nav>
         <a href="/user/signin" class="btn-write">Sign in</a>
       <% } %>
-      <button type="button" class="nav-toggle" aria-label="Toggle menu"><span></span></button>
+      <button type="button" class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks">
+        <span></span>
+      </button>
     </div>
   </div>
 </header>

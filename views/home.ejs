@@ -10,7 +10,8 @@
     <main class="wrap">
         <% if (!blogs || blogs.length === 0) { %>
 
-            <div class="empty-state">
+            <div class="empty-state reveal">
+                <div class="empty-state__icon">✍️</div>
                 <h3>The front page is blank.</h3>
                 <p>Nobody has filed a story yet — <a href="/blog/add-new">write the first one</a>.</p>
             </div>
@@ -18,33 +19,49 @@
         <% } else { %>
             <% const featured = blogs[0]; const rest = blogs.slice(1); %>
 
-            <section class="featured">
+            <section class="featured reveal">
                 <div class="featured__media">
-                    <img src="<%= (featured.coverImage && featured.coverImage.data) ? `/blog/${featured._id}/cover-image` : (featured.coverImageURL || '') %>" alt="<%= featured.title %>">
+                    <img
+                        src="<%= (featured.coverImage && featured.coverImage.data) ? `/blog/${featured._id}/cover-image` : (featured.coverImageURL || '') %>"
+                        alt="<%= featured.title %>"
+                        loading="eager"
+                        decoding="async"
+                    >
                 </div>
-                <div>
-                    <span class="eyebrow">Front page &middot; featured</span>
+                <div class="featured__content">
+                    <span class="featured__tag">Featured</span>
                     <h1 class="featured__title"><a href="/blog/<%= featured._id %>"><%= featured.title %></a></h1>
-                    <p class="featured__excerpt"><%= featured.body.slice(0, 220) %><%= featured.body.length > 220 ? '…' : '' %></p>
+                    <p class="featured__excerpt"><%= featured.body.slice(0, 240) %><%= featured.body.length > 240 ? '…' : '' %></p>
+                    <a class="featured__readmore" href="/blog/<%= featured._id %>">Read the story</a>
                     <div class="byline">
-                        <span><%= new Date(featured.createdAt).toDateString() %></span>
+                        <span><%= new Date(featured.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) %></span>
                     </div>
                 </div>
             </section>
 
             <% if (rest.length > 0) { %>
-                <div class="section-label"><h2>More stories</h2></div>
+                <div class="section-label reveal"><h2>More stories</h2></div>
 
                 <section class="grid">
                     <% rest.forEach((blog, i) => { %>
-                        <a class="post-card" href="/blog/<%= blog._id %>">
+                        <a class="post-card reveal reveal-delay-<%= (i % 3) + 1 %>" href="/blog/<%= blog._id %>">
                             <span class="post-card__num"><%= String(i + 2).padStart(2, '0') %></span>
                             <div class="post-card__media">
-                                <img src="<%= (blog.coverImage && blog.coverImage.data) ? `/blog/${blog._id}/cover-image` : (blog.coverImageURL || '') %>" alt="<%= blog.title %>">
+                                <img
+                                    src="<%= (blog.coverImage && blog.coverImage.data) ? `/blog/${blog._id}/cover-image` : (blog.coverImageURL || '') %>"
+                                    alt="<%= blog.title %>"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
                             </div>
                             <h3 class="post-card__title"><%= blog.title %></h3>
-                            <p class="post-card__excerpt"><%= blog.body.slice(0, 90) %><%= blog.body.length > 90 ? '…' : '' %></p>
-                            <div class="byline"><span><%= new Date(blog.createdAt).toDateString() %></span></div>
+                            <p class="post-card__excerpt"><%= blog.body.slice(0, 100) %><%= blog.body.length > 100 ? '…' : '' %></p>
+                            <div class="post-card__footer">
+                                <div class="byline">
+                                    <span><%= new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></span>
+                                </div>
+                                <span class="post-card__arrow">→</span>
+                            </div>
                         </a>
                     <% }) %>
                 </section>
@@ -54,8 +71,15 @@
 
     <footer class="site-footer">
         <div class="wrap">
-            <p>Blogify &mdash; a small press for your thoughts.</p>
-            <p>Set in Fraunces &amp; Inter.</p>
+            <div class="site-footer__inner">
+                <div class="site-footer__brand">Blog<span>ify</span></div>
+                <p class="site-footer__copy">© <%= new Date().getFullYear() %> &mdash; A small press for your thoughts.</p>
+                <nav class="site-footer__links">
+                    <a href="/">Home</a>
+                    <a href="/blog/add-new">Write</a>
+                    <a href="/user/signin">Sign in</a>
+                </nav>
+            </div>
         </div>
     </footer>
 
