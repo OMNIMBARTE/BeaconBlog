@@ -15,12 +15,36 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.set('view engine', 'ejs');
-app.set('views', path.resolve('./views'));
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookie_parser());
 app.use(checkForAuthenticationCookie("Token"));
-app.use(express.static(path.resolve("./public")));
+app.use(express.static(path.join(__dirname, "public")));
+
+let isConnected = false;
+async function connectDB() {
+    if (isConnected || mongoose.connection.readyState >= 1) {
+        isConnected = true;
+        return;
+    }
+    if (!process.env.MONGO_URL) {
+        throw new Error("MONGO_URL environment variable is missing.");
+    }
+    await mongoose.connect(process.env.MONGO_URL);
+    isConnected = true;
+}
+
+// Ensure database connection for every request in serverless environment
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("Database connection error:", error);
+        res.status(500).send("Database connection error");
+    }
+});
 
 app.get("/", async (req, res)=>{
     const allBlogs = await Blog.find({});
@@ -33,21 +57,18 @@ app.get("/", async (req, res)=>{
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
 
-async function start() {
-    await mongoose.connect(process.env.MONGO_URL);
-    console.log("MongoDB Connected.");
-
-    // Build/repair schema indexes (e.g. the unique email index) BEFORE
-    // accepting any traffic. Without this, autoIndex runs in the background
-    // after connect() resolves, so a signup landing right after a restart
-    // can race the index build and slip a duplicate email past it.
-    await mongoose.connection.syncIndexes();
-    console.log("Indexes synced.");
-
-    app.listen(PORT, () => console.log(`The port starts at PORT ${PORT}`));
+if (require.main === module) {
+    connectDB()
+        .then(async () => {
+            console.log("MongoDB Connected.");
+            await mongoose.connection.syncIndexes();
+            console.log("Indexes synced.");
+            app.listen(PORT, () => console.log(`The port starts at PORT ${PORT}`));
+        })
+        .catch((error) => {
+            console.error("Failed to start server:", error);
+            process.exit(1);
+        });
 }
 
-start().catch((error) => {
-    console.error("Failed to start server:", error);
-    process.exit(1);
-});
+module.exports = app;

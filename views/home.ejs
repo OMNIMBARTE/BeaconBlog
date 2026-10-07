@@ -20,7 +20,7 @@
 
             <section class="featured">
                 <div class="featured__media">
-                    <img src="/blog/<%= featured._id %>/cover-image" alt="<%= featured.title %>">
+                    <img src="<%= (featured.coverImage && featured.coverImage.data) ? `/blog/${featured._id}/cover-image` : (featured.coverImageURL || '') %>" alt="<%= featured.title %>">
                 </div>
                 <div>
                     <span class="eyebrow">Front page &middot; featured</span>
@@ -40,7 +40,7 @@
                         <a class="post-card" href="/blog/<%= blog._id %>">
                             <span class="post-card__num"><%= String(i + 2).padStart(2, '0') %></span>
                             <div class="post-card__media">
-                                <img src="/blog/<%= blog._id %>/cover-image" alt="<%= blog.title %>">
+                                <img src="<%= (blog.coverImage && blog.coverImage.data) ? `/blog/${blog._id}/cover-image` : (blog.coverImageURL || '') %>" alt="<%= blog.title %>">
                             </div>
                             <h3 class="post-card__title"><%= blog.title %></h3>
                             <p class="post-card__excerpt"><%= blog.body.slice(0, 90) %><%= blog.body.length > 90 ? '…' : '' %></p>
