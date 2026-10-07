@@ -3,6 +3,7 @@ const router = Router();
 const multer = require("multer");
 const Blog = require("../models/blog");
 const Comment = require("../models/comment");
+const User = require("../models/user");
 
 // use memory storage instead of disk storage
 const storage = multer.memoryStorage();

@@ -63,5 +63,13 @@ userSchema.static('matchPasswordAndGenerateToken', async function(email, passwor
 
 });
 
-const User = model('user', userSchema);
+const mongoose = require("mongoose");
+const User = mongoose.models.User || mongoose.models.user || mongoose.model('User', userSchema);
+if (!mongoose.models.user) {
+    mongoose.model('user', userSchema);
+}
+if (!mongoose.models.User) {
+    mongoose.model('User', userSchema);
+}
+
 module.exports = User;

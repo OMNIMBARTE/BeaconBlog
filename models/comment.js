@@ -1,4 +1,5 @@
-const { model, Schema } = require("mongoose");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const commentSchema = new Schema ({
     content: {
@@ -7,16 +8,19 @@ const commentSchema = new Schema ({
     },
     blogId:{
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "Blog",
     },
     createdBy: {
         type: Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
     },
 
 },
 { timestamps: true });
 
-const Comment = model("comment", commentSchema);
+const Comment = mongoose.models.Comment || mongoose.models.comment || mongoose.model("Comment", commentSchema);
+if (!mongoose.models.comment) {
+    mongoose.model("comment", commentSchema);
+}
 
 module.exports = Comment;

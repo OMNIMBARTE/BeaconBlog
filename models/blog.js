@@ -1,5 +1,6 @@
 // models/blog.js
 const mongoose = require("mongoose");
+require("./user");
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -11,4 +12,9 @@ const blogSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-module.exports = mongoose.model("Blog", blogSchema);
+const Blog = mongoose.models.Blog || mongoose.models.blog || mongoose.model("Blog", blogSchema);
+if (!mongoose.models.blog) {
+  mongoose.model("blog", blogSchema);
+}
+
+module.exports = Blog;
