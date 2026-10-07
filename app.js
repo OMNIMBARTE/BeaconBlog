@@ -57,6 +57,11 @@ app.get("/", async (req, res)=>{
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
 
+app.use((err, req, res, next) => {
+    console.error("Application Error:", err);
+    res.status(500).send(`Application Error: ${err.message}`);
+});
+
 if (require.main === module) {
     connectDB()
         .then(async () => {
